@@ -1,0 +1,21 @@
+{
+    "name": "pythagus/laravel-authentification-log",
+    "description": "Simple way to save in database your user authentifications",
+    "keywords": ["authentification", "log", "Laravel"],
+    "homepage": "https://github.com/Pythagus/laravel-authentification-log",
+    "type": "package",
+    "license": "MIT",
+    "authors": [{
+        "name": "Damien Molina",
+        "email": "damis01800@gmail.com"
+    }],
+    "require": {
+        "php": ">=5.6.4",
+        "laravel/framework": ">=5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pythagus\\LaravelAuthentificationLog\\": "src/"
+        }
+    }
+}
