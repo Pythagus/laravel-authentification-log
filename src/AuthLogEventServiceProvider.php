@@ -23,15 +23,6 @@ class AuthLogEventServiceProvider extends ServiceProvider {
         Login::class => [
             AuthentificationListener::class,
         ],
-    ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot() {
-        parent::boot();
-    }
+    ] ;
 
 }

@@ -60,10 +60,29 @@ trait AuthLoggable {
 	}
 
 	/**
+	 * Get the last login user date in the
+	 * given format.
+	 *
+	 * @param string $format
+	 * @param int $position
+	 * @return string
+	 */
+	public function lastLoginAtFormat(string $format = 'Y-m-d H:i', int $position = 1) {
+		/** @var UserLogin $login */
+		$login = $this->lastLoginScope($position)->first() ;
+
+		if($login) {
+			return $login->authAt()->format($format) ;
+		}
+
+		return null ;
+	}
+
+	/**
 	 * @param int $position
 	 * @return Collection
 	 */
-	public function lastLoginScope(int $position) {
+	private function lastLoginScope(int $position) {
 		return $this->logins->skip($position) ;
 	}
 

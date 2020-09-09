@@ -12,32 +12,41 @@ use Illuminate\Support\ServiceProvider;
  */
 class AuthLogServiceProvider extends ServiceProvider {
 
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register() {
-        $this->app->register(AuthLogEventServiceProvider::class);
+	/**
+	 * Register any application services.
+	 *
+	 * @return void
+	 */
+	public function register() {
+		$this->app->register(AuthLogEventServiceProvider::class);
 
-        $this->publishFiles() ;
-    }
+		$this->publishFiles() ;
+		$this->loadMigrations() ;
+	}
 
-    /**
-     * Publish specific files.
-     *
-     * @return void
-     */
-    private function publishFiles() {
-        $publishTag = 'auth-log' ;
+	/**
+	 * Publish specific files.
+	 *
+	 * @return void
+	 */
+	private function publishFiles() {
+		$publishTag = 'auth-log' ;
 
-        $this->publishes(
-            [__DIR__.'/Migrations' => database_path('migrations')], $publishTag.'-migrations'
-        ) ;
+		$this->publishes(
+			[__DIR__.'/Migrations' => database_path('migrations')], $publishTag.'-migrations'
+		) ;
+	}
 
-        $this->publishes(
-            [__DIR__.'/Models' => app_path()], $publishTag.'-models'
-        ) ;
-    }
+	/**
+	 * Load the migrations only whether It
+	 * is enabled in the configs.
+	 *
+	 * @return void
+	 */
+	private function loadMigrations() {
+		if(config('app.user-login.migration', true)) {
+			$this->loadMigrationsFrom(__DIR__.'/Migrations') ;
+		}
+	}
 
 }

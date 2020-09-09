@@ -2,6 +2,7 @@
 
 namespace Pythagus\LaravelAuthentificationLog\Listeners;
 
+use Exception;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Pythagus\LaravelAuthentificationLog\Models\UserLogin;
@@ -15,17 +16,11 @@ use Pythagus\LaravelAuthentificationLog\Models\UserLogin;
 class AuthentificationListener implements ShouldQueue {
 
 	/**
-	 * Class of the UserLogin instance.
-	 *
-	 * @var string
-	 */
-	public static $class ;
-
-	/**
 	 * Handle the event.
 	 *
 	 * @param Login $event
 	 * @return void
+	 * @throws Exception
 	 */
 	public function handle(Login $event) {
 		$class = $this->getClass() ;
@@ -43,6 +38,7 @@ class AuthentificationListener implements ShouldQueue {
 	 *
 	 * @param $user
 	 * @return array
+	 * @throws Exception
 	 */
 	private function getTreatment($user) {
 		$class = $this->getClass() ;
@@ -54,22 +50,16 @@ class AuthentificationListener implements ShouldQueue {
 	 * Get the UserLogin class.
 	 *
 	 * @return string|UserLogin
+	 * @throws Exception
 	 */
 	private function getClass() {
-		if(is_null(static::$class)) {
-			AuthentificationListener::setClass(UserLogin::class) ;
+		$class = config('app.user-login.model', UserLogin::class) ;
+
+		if(! ($class instanceof UserLogin)) {
+			throw new Exception("$class model should extend ".UserLogin::class) ;
 		}
 
-		return AuthentificationListener::$class ;
-	}
-
-	/**
-	 * Set the UserLogin class.
-	 *
-	 * @param string $class
-	 */
-	public static function setClass(string $class) {
-		AuthentificationListener::$class = $class ;
+		return $class ;
 	}
 
 }

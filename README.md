@@ -22,13 +22,7 @@ In this section, we will see how to use the current package features.
 The package works with Laravel listener for the ```Illuminate\Auth\Events\Login``` event. When this event is fired, 
 the ```Pythagus\LaravelAuthentificationLog\Listeners\AuthentificationListener``` is caught and make a new instance of UserLogin.
 
-You don't need to redeclare the listener to change the user data you want to store. The UserLogin model defines a treatment callable
-that you can edit by publishing the model: 
-```bash
-php artisan vendor:publish --tag=auth-log-models
-```
-
-The method ```getDataFromUser()``` take the new logged in user as parameter. You can choose the stored data. For example, you can 
+The method ```getDataFromUser()``` in the ```UserLogin``` model takes the new logged in user as parameter. You can choose the stored data. For example, you can 
 access the ip address like:
 ```php
 public static function getDataFromUser(User $user) {
@@ -41,11 +35,38 @@ public static function getDataFromUser(User $user) {
 
 Don't forget the returned data array should be fillable. See ```UserLogin``` model.
 
+##### Configurations
+You can configure this package by adding the following lines into your ```config/app.php```:
+```php
+/*
+|--------------------------------------------------------------------------
+| User Login
+|--------------------------------------------------------------------------
+|
+| This array is used to set the main properties of your
+| user login storage.
+|
+*/
+'user-login' => [
+    /*
+     * Determine whether the default migration should
+     * be executed or not.
+     */
+    'migration' => true,
+
+    // The UserLogin class.
+    'model' => \Pythagus\LaravelAuthentificationLog\Models\UserLogin::class,
+],
+```
+If you want to change the stored data, you need to extend the ```\Pythagus\LaravelAuthentificationLog\Models\UserLogin``` model.
+See the UserLogin Model section.
+
 ##### Migration
 This package includes a simple migration to generate the **user_login** table. You can publish the file executing:
 ```bash
 php artisan vendor:publish --tag=auth-log-migrations
 ```
+By default, the migrations will automatically be loaded.
 
 As well, you can edit your migration file regarding the fillable attribute of the ```UserLogin``` model.
 
@@ -53,15 +74,40 @@ As well, you can edit your migration file regarding the fillable attribute of th
 The ```UserLogin``` model is used to manage the table instances. The ```created_at``` field is already casted as a datetime
 to automatically return a Carbon instance. The ```authAt()``` method is only here to be more "logical" than "created_at".
 
-If you want to custom the data, you also need to redeclare the ```UserLogin``` fillable attribute. You can publish the model executing:
-```bash
-php artisan vendor:publish --tag=auth-log-models
+If you want to custom the data, you also need to extend the ```UserLogin``` class to adding more fillable attributes. 
+You can extend the model like:
+```php
+<?php
+
+namespace App;
+
+use Pythagus\LaravelAuthentificationLog\Models\UserLogin as Model;
+
+/**
+ * Class UserLogin
+ * @package Pythagus\LaravelAuthentificationLog\Models
+ *
+ * @author: Damien MOLINA
+ */
+class UserLogin extends Model {
+
+	/**
+	 * Get the data from the given user.
+	 *
+	 * @param User $user
+	 * @return array
+	 */
+	public static function getDataFromUser($user) {
+		return [
+			'user_id' => $user->id,
+			'ip_addr' => request()->ip(),
+		] ;
+	}
+
+}
 ```
 
-Don't forget to declare your own UserLogin in your ```AppServiceProvider``` register method:
-```php
-AuthentificationListener::setClass(UserLogin::class) ;
-```
+Don't forget to declare your own UserLogin in your ```config/app.php``` file.
 
 ##### Model User
 In your User model, you can use the ```AuthLoggable``` trait of this package to access useful methods.

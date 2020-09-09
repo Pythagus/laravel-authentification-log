@@ -3,7 +3,6 @@
 namespace Pythagus\LaravelAuthentificationLog\Models;
 
 use Carbon\Carbon;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -51,10 +50,10 @@ class UserLogin extends Model {
 	/**
 	 * Get the data from the given user.
 	 *
-	 * @param User $user
+	 * @param $user
 	 * @return array
 	 */
-	public static function getDataFromUser(User $user) {
+	public static function getDataFromUser($user) {
 		return [
 			'user_id' => $user->id,
 			'ip_addr' => request()->ip(),
