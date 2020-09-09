@@ -17,5 +17,12 @@
         "psr-4": {
             "Pythagus\\LaravelAuthentificationLog\\": "src/"
         }
-    }
+    },
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Pythagus\\LaravelAuthentificationLog\\AuthLogServiceProvider"
+			]
+		}
+	}
 }
