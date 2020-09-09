@@ -53,10 +53,10 @@ class AuthentificationListener implements ShouldQueue {
 	 * @throws Exception
 	 */
 	private function getClass() {
-		$class = config('app.user-login.model', UserLogin::class) ;
+		$class = UserLogin::config('model', UserLogin::class) ;
 
-		if(! ($class instanceof UserLogin)) {
-			throw new Exception("$class model should extend ".UserLogin::class) ;
+		if(! is_subclass_of($class, UserLogin::class)) {
+			throw new Exception("$class should extend ".UserLogin::class) ;
 		}
 
 		return $class ;

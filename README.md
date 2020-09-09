@@ -36,7 +36,7 @@ public static function getDataFromUser(User $user) {
 Don't forget the returned data array should be fillable. See ```UserLogin``` model.
 
 ##### Configurations
-You can configure this package by adding the following lines into your ```config/app.php```:
+You can configure this package by adding the following lines into your ```config/auth.php```:
 ```php
 /*
 |--------------------------------------------------------------------------
@@ -107,7 +107,7 @@ class UserLogin extends Model {
 }
 ```
 
-Don't forget to declare your own UserLogin in your ```config/app.php``` file.
+Don't forget to declare your own UserLogin in your ```config/auth.php``` file.
 
 ##### Model User
 In your User model, you can use the ```AuthLoggable``` trait of this package to access useful methods.

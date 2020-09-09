@@ -60,4 +60,15 @@ class UserLogin extends Model {
 		] ;
 	}
 
+	/**
+	 * Get the config at the given key.
+	 *
+	 * @param string $key
+	 * @param $default
+	 * @return mixed
+	 */
+	public static function config(string $key, $default = null) {
+		return config('auth.user-login.'.$key, $default) ;
+	}
+
 }

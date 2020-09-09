@@ -3,6 +3,7 @@
 namespace Pythagus\LaravelAuthentificationLog;
 
 use Illuminate\Support\ServiceProvider;
+use Pythagus\LaravelAuthentificationLog\Models\UserLogin;
 
 /**
  * Class AuthLogServiceProvider
@@ -44,7 +45,7 @@ class AuthLogServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	private function loadMigrations() {
-		if(config('app.user-login.migration', true)) {
+		if(UserLogin::config('migration', true)) {
 			$this->loadMigrationsFrom(__DIR__.'/Migrations') ;
 		}
 	}
